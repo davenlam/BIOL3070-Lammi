@@ -13,6 +13,15 @@ knitr::opts_chunk$set(echo = TRUE)
 # ABSTRACT
 
 Fill in abstract at the end after we have finished the methods, results, discussion, conclusions and know what our data "says".
+Make sure it summarizes your full report (background → question → methods → key results → conclusion).
+
+Keep it concise (4–6 sentences).
+
+Include the species, data type, and main finding if possible.
+
+Tip: If you’re stuck, start with “This report investigates…”
+
+This report investigates how 
 
 # BACKGROUND
 

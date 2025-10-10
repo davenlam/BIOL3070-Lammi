@@ -1,7 +1,7 @@
 Warm-up mini-Report: Mosquito Blood Hosts in Salt Lake City, Utah
 ================
 Daven Lammi
-2025-10-09
+2025-10-10
 
 - [ABSTRACT](#abstract)
 - [BACKGROUND](#background)
@@ -26,7 +26,17 @@ Daven Lammi
 # ABSTRACT
 
 Fill in abstract at the end after we have finished the methods, results,
-discussion, conclusions and know what our data “says”.
+discussion, conclusions and know what our data “says”. Make sure it
+summarizes your full report (background → question → methods → key
+results → conclusion).
+
+Keep it concise (4–6 sentences).
+
+Include the species, data type, and main finding if possible.
+
+Tip: If you’re stuck, start with “This report investigates…”
+
+This report investigates how
 
 # BACKGROUND
 
@@ -235,4 +245,4 @@ host_species_colors <- species_colors
     Dis. 2003 Mar;9(3):311-22. <https://doi.org/10.3201/eid0903.020628>
 
 2.  ChatGPT. OpenAI, version Jan 2025. Used as a reference for functions
-    such as plot() and to correct syntax errors. Accessed 2025-10-09.
+    such as plot() and to correct syntax errors. Accessed 2025-10-10.
