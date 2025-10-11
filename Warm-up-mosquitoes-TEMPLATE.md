@@ -1,7 +1,7 @@
 Warm-up mini-Report: Mosquito Blood Hosts in Salt Lake City, Utah
 ================
 Daven Lammi
-2025-10-10
+2025-10-11
 
 - [ABSTRACT](#abstract)
 - [BACKGROUND](#background)
@@ -10,11 +10,10 @@ Daven Lammi
   - [Hypothesis](#hypothesis)
   - [Prediction](#prediction)
 - [METHODS](#methods)
-  - [Fill in first analysis](#fill-in-first-analysis)
 - [Barplots of blood meal ID by trap locations with/without WNV positive
   mosquito
   pools](#barplots-of-blood-meal-id-by-trap-locations-withwithout-wnv-positive-mosquito-pools)
-  - [Fill in second analysis/plot](#fill-in-second-analysisplot)
+  - [Linear Regression](#linear-regression)
 - [DISCUSSION](#discussion)
   - [Interpretation - fill in
     analysis](#interpretation---fill-in-analysis)
@@ -25,35 +24,38 @@ Daven Lammi
 
 # ABSTRACT
 
-Fill in abstract at the end after we have finished the methods, results,
-discussion, conclusions and know what our data “says”. Make sure it
-summarizes your full report (background → question → methods → key
-results → conclusion).
-
-Keep it concise (4–6 sentences).
-
-Include the species, data type, and main finding if possible.
-
-Tip: If you’re stuck, start with “This report investigates…”
-
-This report investigates how
+This report investigates the role of House Finches (Haemorhous
+mexicanus) as amplifying hosts of West Nile virus (WNV) in Salt Lake
+City. Blood meal data from various sites were collected to determine the
+relationship between birds, mosquitoes, and WNV. Bar plots of days of
+viremia revealed that House Finches contain detectable WNV in their
+bloodstream for the longest period of time, which increases their
+ability to spread the virus. Linear models showed that the likelihood of
+WNV-positive mosquito pools and rate of WNV positivity both increased
+significantly with the number of House Finch blood meals. These results
+suggest that House Finches are important amplifying hosts that
+contribute to WNV spread in the Salt Lake area.
 
 # BACKGROUND
 
-Fill in some text here that provides background info on the WNV system,
-the blood meal DNA extractions, PCR, sequencing, etc. and the foundation
-for our question/hypothesis.
-
-For example, we can use the viremia duration (Kumar et al., 2003) bar
-plot (make sure to reference sources!!!) to illustrate the potential
-importance of house finches in WNV transmission and as the logical
-foundation for our hypothesis that house finches serve as amplifying
-hosts for WNV… and the prediction that locations with more house finches
-in our blood host analysis are also the same locations with higher
-positive tests for WNV in mosquito pools…
-
-NOTE: Examples of data you can plot for the background info at
-<https://github.com/saarman/BIOL3070/>
+According to the CDC, thousands of Americans get infected with West Nile
+Virus(WNV) a year, with many experiencing severe illness or even death
+(1). As the infection is transmitted through mosquitoes, there us risk
+of infection throughout the entirety of the US due to their
+widespreadness. The mosquitoes themselves become infected by feeding on
+infected birds. Due to this, many efforts have been made to understand
+where this disease makes contact with humans along all levels of
+transmission, as shown by the research efforts of Kumar et al., 2003
+(2). In this study, they allowed 25 species of birds to become infected
+with WNV and monitored them, including their viremia duration. The
+results of the viremia length can be visualized by the code below. From
+the resulting figure it can be seen that there is much variability in
+the days of detectable viremia across the various species. However,
+there were also some clear species that had longer lengths, such as
+house finches. Due to this, house finches may be a large risk for
+transmission of WNV. If this were the case, it would be expected that
+locations with higher populations of house finches would also have
+higher positive tests for WNV in mosquito pools.
 
 ``` r
 # Manually transcribe duration (mean, lo, hi) from the last table column
@@ -97,31 +99,32 @@ arrows(duration$lo, bp, duration$hi, bp,
 
 ## Questions
 
-Fill in here, the question we want to answer… e.g. What bird species is
-acting as WNV amplifying host in Salt Lake City?
+In this study we want to learn which bird species pose the highest
+threat to the spread of WNV in Salt Lake City, UT.
 
 ## Hypothesis
 
-Fill in hypothesis… e.g. House finches are acting as important
-amplifying hosts of WNV in Salt Lake City.
+House Finches are expected to be a threat to the spread of WNV in Salt
+Lake City, UT by acting as amplifying hosts.
 
 ## Prediction
 
-Fill in prediction… e.g. If house finches are acting as important
-amplifying hosts, we predict that trapping locations where mosquitoes
-feed on house finches will also have higher rates of confirmed WNV in
-tested mosquito pools.
+If house finches are the biggest threat to the spread of WNV, we predict
+that there will be a positive correlation between the number of house
+finches in the mosquito feeding trapping locations and the rates of
+confirmed WNV in the mosquito pools.
 
 # METHODS
 
-Fill in here, including overview of procedure and methods used for this
-project.
-
-## Fill in first analysis
-
-``` r
-# put code for analysis here
-```
+To test this hypothesis, we created bar plots which compared the number
+of mosquito blood meals for various species in locations with no
+detected WNV and locations with detected WNV. This allows us to see if
+mosquito blood meals are disproportionate across either category. For
+additional analysis, a linear model was calculated to determine the
+strength of the relationship between the number of house finch blood
+meals and the presence of WNV-positive pools and rates. This allows us
+to know if house finch blood meals can predict if there will be WNV
+infections.
 
 # Barplots of blood meal ID by trap locations with/without WNV positive mosquito pools
 
@@ -223,26 +226,133 @@ par(op)
 host_species_colors <- species_colors
 ```
 
-## Fill in second analysis/plot
+This analysis visualizes blood meal counts for various bird species
+across locations with and without WNV-positive pools, allowing for
+comparison between them.
+
+## Linear Regression
 
 ``` r
 # put code for plotting here
 ```
 
+``` r
+# second-analysis-or-plot, glm with house finch alone against binary +/_
+glm1 <- glm(loc_positives ~ host_House_finch,
+            data = counts_matrix,
+            family = binomial)
+summary(glm1)
+```
+
+    ## 
+    ## Call:
+    ## glm(formula = loc_positives ~ host_House_finch, family = binomial, 
+    ##     data = counts_matrix)
+    ## 
+    ## Coefficients:
+    ##                  Estimate Std. Error z value Pr(>|z|)  
+    ## (Intercept)       -0.1709     0.1053  -1.622   0.1047  
+    ## host_House_finch   0.3468     0.1586   2.187   0.0287 *
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## (Dispersion parameter for binomial family taken to be 1)
+    ## 
+    ##     Null deviance: 546.67  on 394  degrees of freedom
+    ## Residual deviance: 539.69  on 393  degrees of freedom
+    ## AIC: 543.69
+    ## 
+    ## Number of Fisher Scoring iterations: 4
+
+``` r
+#glm with house-finch alone against positivity rate
+glm2 <- glm(loc_rate ~ host_House_finch,
+            data = counts_matrix)
+summary(glm2)
+```
+
+    ## 
+    ## Call:
+    ## glm(formula = loc_rate ~ host_House_finch, data = counts_matrix)
+    ## 
+    ## Coefficients:
+    ##                  Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)      0.054861   0.006755   8.122 6.07e-15 ***
+    ## host_House_finch 0.027479   0.006662   4.125 4.54e-05 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## (Dispersion parameter for gaussian family taken to be 0.01689032)
+    ## 
+    ##     Null deviance: 6.8915  on 392  degrees of freedom
+    ## Residual deviance: 6.6041  on 391  degrees of freedom
+    ##   (2 observations deleted due to missingness)
+    ## AIC: -484.56
+    ## 
+    ## Number of Fisher Scoring iterations: 2
+
+This analysis performs linear regressions which allows us to determine
+if house finch blood meals can predict WNV-positive pools and rates.
+
 # DISCUSSION
 
 ## Interpretation - fill in analysis
 
+Through the bar plot analysis of blood meal counts among various species
+between locations with and without WNV-positive pools, we found that the
+locations with WNV-positive pools had disproportionately higher blood
+meal counts for house finches when compared to the locations with no
+WNV-positive pools. This suggests that house finches are a key source of
+infection for mosquitoes and thus become amplifying hosts by causing
+more mosquitoes to feed on them which transmits WNV to other species.
+
 ## Interpretation - fill in analysis/plot
+
+Through the linear regression analysis we first found that the
+coefficient for the relationship between house finch blood meals and
+WNV-positive pools was 0.3468 with p value of 0.0287. Since this value
+is positive, this means that an increase of of house finch blood meals
+predicts an increase in WNV-positive pools. Additionally, with the low
+p-value of 0.0287, these results are statistically significant. The
+second analysis done with linear regression measured the relationship
+between house finch blood meals and WNV positivity rate. The coefficient
+from this analysis was 0.0275 with a p-value of 4.54e05. The positive
+value of 0.0275 implies that an increase in house finch blood meals
+predicts an increase in WNV positivity rate, and the low p-value of
+4.54e05 makes this value statistically significant. These analyses
+together imply that house finches are acting as amplifying hosts which
+is contributing to the spread of WNV in Salt Lake City.
 
 # CONCLUSION
 
+Through our analyses we found that house finches appear to be a large
+contributing factor to the spread of WNV in Salt Lake City by acting as
+amplifying hosts. The bar plot comparison of house finch blood meals
+between locations with and without WNV-positive pools allowed us to see
+that house finches are feasted on disproportionately more in
+WNV-positive locations. This shows that house finches amplify mosquito
+populations and help spread WNV. Additionally we found through the
+linear regression analysis that house finch blood meal counts positively
+predict an increase in WNV-positive pools and rates, with coefficients
+of 0.3468 and 0.0275 respectively. Overall, these findings support our
+hypothesis that house finches are a threat to the spread of WNV by
+acting as amplifying hosts. A limitation to this design however is that
+we may only have data from a small period of time, which only reflects
+the state of house finch-mosquito dynamics at that point in time. A more
+precise and accurate depiction of this relationship could come from
+collecting data for many years, which would make sure that the data is
+not biased by an abnormal year.
+
 # REFERENCES
 
-1.  Komar N, Langevin S, Hinten S, Nemeth N, Edwards E, Hettler D, Davis
+1.  Centers for Disease Control and Prevention. About West Nile
+    \[Internet\]. West Nile Virus. 2024. Available from:
+    <https://www.cdc.gov/west-nile-virus/about/index.html>
+
+2.  Komar N, Langevin S, Hinten S, Nemeth N, Edwards E, Hettler D, Davis
     B, Bowen R, Bunning M. Experimental infection of North American
     birds with the New York 1999 strain of West Nile virus. Emerg Infect
     Dis. 2003 Mar;9(3):311-22. <https://doi.org/10.3201/eid0903.020628>
 
-2.  ChatGPT. OpenAI, version Jan 2025. Used as a reference for functions
-    such as plot() and to correct syntax errors. Accessed 2025-10-10.
+3.  ChatGPT. OpenAI, version Jan 2025. Used as a reference for functions
+    such as plot() and to correct syntax errors. Accessed 2025-10-11.
