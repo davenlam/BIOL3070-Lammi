@@ -1,51 +1,100 @@
 Final
 ================
 Daven Lammi
-2025-11-14
+2025-12-06
 
 # ABSTRACT
 
+This study looked at the asthma rates for U.S. states from the year
+2022, as collected by the CDC. This data was divided among four regions
+of the U.S.: Northeast, South, North Central, and West. The asthma data
+for each state, as well as each region, was compared with each state and
+region’s population density. Comparison of this data gave inconclusive
+results, as there was inconsistency between the population density and
+asthma rates of the regions. However, there was a substantial difference
+in population density, as well as asthma prevalence for the Northeast
+region, when compared to the other regions. Regardless, the ANOVA tests
+comparing population density and asthma rates were insignificant, thus
+leaving it inconclusive if population density is a determining factor
+for asthma prevalence. However, we were able to determine significant
+difference in asthma rates by region, it is just unclear if population
+density affects this difference.
+
 # BACKGROUND
+
+Asthma has immense effects across the world, with 300 million affected
+individuals worldwide (Kudo, 2013). With the constant growth of urban
+environments, asthma rates remain on the rise (Lundbäck, 2016). As such
+a prevalent condition, much data is collected on it each year. However,
+there are many factors influencing asthma rates, and analysis of asthma
+data may provide useful insight on which factors are the most impactful.
+In our research, we aim to discover if there is a difference in asthma
+prevalence across U.S states and regions (Northeast, South, North
+Central, West). Additionally, we ask whether this difference may be due
+to population density. Utilizing information gained from previous
+research, we expect that states and regions with higher population
+density and urbanization will have higher rates of asthma.
 
 # STUDY QUESTION and HYPOTHESIS
 
 ## Questions
 
-Do different regions of the U. S vary in asthma prevalence and mortality
-rates?
+Do different regions of the U. S vary in asthma prevalence?
 
 ## Hypothesis
 
-We predict that regions that are more densely populated will experience
+We expect that regions that are more densely populated will experience
 higher rates of asthma due to pollution from large cities.
 
-## Possible Visualizations/ Test Statistic
+## Prediction
 
-barplot and t-test
+We predict that states in the Northeast region of the U.S will have
+higher rates of asthma as they are the most densely populated.
 
-## Barplot
+# METHODS
 
-Asthma Prevalence by U.S. Region
+To tackle this question we used data from the CDC which contained asthma
+rates by state from 2022 (Centers for Disease Control and Prevention,
+2024). We compared the asthma rates of the continental U.S. states in a
+bar graph, sorting them from highest asthma rates to lowest. The data
+was further visualized in a map of the U.S. showing asthma prevalence
+across the states. We then moved on to analysis of asthma rates by
+splitting the states up into four regions: Northeast, South, North
+Central, and West. The four regions were then displayed in a map of the
+U.S. Asthma rates were then compared across these regions in a box plot.
+Furthermore, the role of population density was visualized in a box plot
+comparing the population densities of the four regions. Additionally,
+this data was visualized in a scatter plot relating state populations
+with asthma prevalence. To validate the results of our figures, several
+ANOVA’s were performed.
+
+## Analysis
+
+Bar Graph
+
+![](FinalRmarkdown_files/figure-gfm/plot-state-data-1.png)<!-- -->
+
+Bar graph comparing asthma rates by state; the Northeast takes the top
+spots but much variation is observed.
+
+Red to Yellow State Asthma Prevalence Map
 
 ``` r
+# Load libraries
 library(ggplot2)
 
-ggplot(asthma_data, aes(x = region, y = prevalence)) +
-  geom_boxplot() +
-  labs(title = "Asthma Prevalence by U.S. Region",
-       x = "Region",
-       y = "Asthma Prevalence (%)") +
-  theme_minimal() +
-  theme(legend.position = "none")
-```
-
-<img src="FinalRmarkdown_files/figure-gfm/bar plot-1.png" style="display: block; margin: auto;" />
-
-Asthma Prevalence by U.S. State
-
-``` r
 library(ggplot2)
 library(maps)
+```
+
+    ## 
+    ## Attaching package: 'maps'
+
+    ## The following object is masked from 'package:purrr':
+    ## 
+    ##     map
+
+``` r
 library(dplyr)
 
 # Map data
@@ -65,7 +114,6 @@ ggplot(map_data, aes(long, lat, group = group, fill = prevalence)) +
 ) +
   labs(
     title = "Asthma Prevalence by U.S. State",
-    subtitle = "Higher prevalence shown in darker colors"
   ) +
   theme_void() +
   theme(
@@ -77,35 +125,232 @@ ggplot(map_data, aes(long, lat, group = group, fill = prevalence)) +
 
 <img src="FinalRmarkdown_files/figure-gfm/prevalence by state-1.png" style="display: block; margin: auto;" />
 
-map
+Map showing asthma rates for the continental U.S. states; The Northeast
+takes the top spots but much variation is observed.
+
+State Regions Map
+
+``` r
+#just regions
+# Get U.S. states map data
+states_map <- map_data("state")
+
+# Create a dataframe of states and their regions
+state_regions <- data.frame(
+  state = tolower(state.name),
+  region = state.region
+)
+
+# Merge map data with region info
+map_data <- states_map %>%
+  left_join(state_regions, by = c("region" = "state"))
+
+# Plot
+ggplot(map_data, aes(x = long, y = lat, group = group, fill = region.y)) +
+  geom_polygon(color = "white") +
+  coord_fixed(1.3) +
+  labs(title = "Four U.S. Census Regions",
+       fill = "Region") +
+  theme_void()
+```
+
+![](FinalRmarkdown_files/figure-gfm/regions%20by%20color-1.png)<!-- -->
+
+Map of the U.S. showing how regions were split up.
+
+State Regions and Asthma Prevalence Box Plot
+
+``` r
+library(ggplot2)
+
+ggplot(asthma_data, aes(x = region, y = prevalence, fill= region)) +
+  geom_boxplot() +
+  labs(title = "Asthma Prevalence by U.S. Region",
+       x = "Region",
+       y = "Asthma Prevalence (%)",
+       fill = "Region") +
+  theme_minimal()
+```
+
+<img src="FinalRmarkdown_files/figure-gfm/box plot-1.png" style="display: block; margin: auto;" />
+
+Box plot showing higher asthma prevalence in the Northeast; other
+regions have little variation.
+
+State Regions and Population Density Box Plot
+
+``` r
+library(ggplot2)
+
+ggplot(asthma_data, aes(x = region, y = pop_density_sqmile, fill= region)) +
+  geom_boxplot() +
+  labs(title = "Population Density by U.S. Region",
+       x = "Region",
+       y = "Population Density (square mile)",
+       fill = "Region") +
+  theme_minimal()
+```
+
+<img src="FinalRmarkdown_files/figure-gfm/box plot population vs region-1.png" style="display: block; margin: auto;" />
+
+Box plot showing higher population density in the Northeast; other
+regions have little variation.
+
+State Population vs Prevalence Scatter Plot
 
 ``` r
 ggplot(asthma_data, aes(x = population, y = prevalence)) +
   geom_point(aes(color=region)) +
   geom_text(aes(label = state_abrv), vjust = -0.5, size = 3)+
-  labs(title = "Number of Individuals With Asthma vs. Asthma Prevalence by State",
+  labs(title = "Population vs. Asthma Prevalence by State",
        x = "Population",
-       y = "Asthma Prevalence (%)") +
+       y = "Asthma Prevalence (%)",
+       color = "Regions") +
   theme_minimal()
 ```
 
 <img src="FinalRmarkdown_files/figure-gfm/scatter plot-1.png" style="display: block; margin: auto;" />
 
-![](FinalRmarkdown_files/figure-gfm/plot-state-data-1.png)<!-- -->
+Scatter plot showing much variation between state population and asthma
+prevalence.
 
-## Prediction
+ANOVA Test for population density and prevalence
 
-# METHODS
+``` r
+# load necessary libraries
+
+library("car")
+library("lme4")
+
+# create a linear model for population density per square mile and asthma prevalence by state
+
+m1 <- lm(prevalence ~ pop_density_sqmile, data=asthma_data)
+
+# perform statistical test
+
+Anova(m1)
+summary(m1)
+```
+
+ANOVA test for region and prevalence, pairwise comparison
+
+``` r
+# load necessary libraries
+
+library(emmeans)
+
+# create a linear model for US region and asthma prevalence
+
+m2 <- lm(prevalence ~ region, data=asthma_data) 
+
+# perform statistical test 
+
+Anova(m2) 
+summary(m2)
+
+
+# pairwise comparison
+
+pairs(emmeans(m2, "region"))
+```
+
+ANOVA test for population density and asthma prevalence by region
+
+``` r
+# create a linear model for average population density per region and asthma prevalence
+
+r1 <- lm(prevalence ~ density, data=region_data)
+
+# perform statistical test
+
+Anova(r1)
+summary(r1)
+```
 
 # DISCUSSION
 
-## Interpretation - fill in analysis
-
-## Interpretation - fill in analysis/plot
+In the bar plot displaying asthma rates by state, the 4 out of the 5
+states with highest asthma rates belonged to the Northeast region.
+Besides this however, there was much variation across the order of the
+states. This implies that while there may be a trend of higher asthma
+rates in some of the Northeast states, there is too much variation to be
+sure. Looking at the map of asthma rates by state we see a similar
+trend, with the states with the highest rates being in the Northeast,
+but variation among the other states. Moving along to the box plot
+displaying asthma prevalence by U.S. regions, we clearly see higher
+rates in the Northeast region, but the North Central, South, and West
+have much smaller variation between them. Looking at the box plot
+showing population density by region, the Northeast has the highest
+average population density, while the other three regions do not have
+immense variation between them. Taking the results of both box plots, we
+see that the region with the highest asthma rates also has the highest
+population density. However, it is unclear if the population density
+among the North Central, South, and West regions impacts asthma rates.
+This is due to there being little variation among these regions, as well
+as the variation existing does not match between population density and
+asthma rates. Looking at the scatter plot comparing state population to
+asthma rates, there is much variation, making it difficult to make
+concrete conclusions. Looking at the ANOVA test for population density
+and asthma prevalence by state, a p-value of 0.6668 was found. Due to
+this p-value being much higher than 0.05, we are not able to determine a
+significant connected between population density and asthma prevalence
+between states. For the ANOVA test for U.S. regions and asthma
+prevalence, a p-value of 0.0192 was calculated. Due to this value being
+lower than 0.05, we are able to determine a significant difference
+between asthma prevalence by region. Lastly, the ANOVA test relating
+population density and asthma prevalence by region resulted in a p-value
+of 0.1293. Due to this p-value being higher than 0.05, we are not able
+to determine a significant relationship between population density and
+asthma prevalence by state. Using this information, we are able to
+determine that while there is a significant difference in asthma
+prevalence by region, it is inconclusive if this difference is due to
+population density. However, although no significance was determined,
+the Northeast was both the highest in population density and in asthma
+prevalence, which does support the hypothesis. However, due to
+inconsistent variation among the other regions for population density
+and asthma rates, as well as failure to determine significance, it
+remain unclear if population density is a influential factor.
 
 # CONCLUSION
 
+Looking at the results of both the box plot comparing asthma prevalence
+by region, as well as the box plot comparing population density by
+region, the Northeast is considerably higher than the other regions
+among both plots. This supports our hypothesis that states and regions
+with higher population density will have higher rates of asthma.
+However, this trend did not continue with the other regions, as there
+was little variation for the population density and the asthma
+prevalence box plots. Additionally, the ANOVA tests relating population
+density and asthma prevalence both at the state and regions levels
+produced insignificant results. Due to this it remains unclear if
+population density is an important factor in predicting asthma rates
+either by state or region. It additionally becomes irrelevant that the
+Northeast is the highest in both population density and asthma rates, as
+the ANOVA failed to produce significant results. However, we were able
+to determine that the difference in asthma rates between regions was
+significant, just not likely due to population density. This difference
+could be due to a variety of factors, such as age, sex, or race. Further
+research considering these factors may produce more conclusive results.
+Additionally, there is some uncertainty in the validity of our results,
+as the data we analyzed was only from 2022. This prevents us from
+accounting for year-by-year variation in asthma rates among the states.
+To improve upon this in future studies, it may be beneficial to analyze
+data across many years. This would lead to a more accurate depiction of
+asthma rates by state, instead of the limited snapshot used in this
+analysis.
+
 # REFERENCES
 
-3.  ChatGPT. OpenAI, version Jan 2025. Used as a reference for functions
-    such as plot() and to correct syntax errors. Accessed 2025-11-14.
+1.  Centers for Disease Control and Prevention. (2024, November 21).
+    Most recent asthma data. U.S. Department of Health and Human
+    Services.
+
+2.  Kudo, M., Ishigatsubo, Y., & Aoki, I. (2013). Pathology of asthma.
+    Frontiers in microbiology, 4, 263.
+
+3.  Lundbäck, B., Backman, H., Lötvall, J., & Rönmark, E. (2016). Is
+    asthma prevalence still increasing?. Expert review of respiratory
+    medicine, 10(1), 39-51.
+
+4.  ChatGPT. OpenAI, version Jan 2025. Used as a reference for functions
+    such as plot() and to correct syntax errors. Accessed 2025-12-06.
